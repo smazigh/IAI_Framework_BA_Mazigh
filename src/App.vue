@@ -33,7 +33,7 @@
     </div>
   </div>
   
-
+// test change
 <div class="row">
   <Weekly v-bind:array1="final"/>
  
