@@ -1,15 +1,11 @@
 <template>
-<div>
+  <div>
     <router-link class="btn" to="/Daily">Start</router-link>
-    <router-link class="btn" to ="/Month">Month</router-link>
-    </div>
+    <router-link class="btn" to="/Month">Month</router-link>
+  </div>
 </template>
 
 <script>
-export default {
-    
-}
+export default {};
 </script>
-<style>
-
-</style>
+<style></style>

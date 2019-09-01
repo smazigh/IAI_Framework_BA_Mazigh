@@ -1,33 +1,45 @@
 <template>
   <div>
- 
-
     <div class="row-cover">
       <div class="row-wrap">
         <div class="row centered">
           <div class="center col s1 offset-s2">
             <div class="card darken-1">
               <div class="card-content black-text">
-                   <GChart type="ColumnChart" :data="chartData" :options="chartOptions" />
-                    <GChart type="LineChart" :data="chartData" :options="chartOptions" />
+                <GChart
+                  type="ColumnChart"
+                  :data="chartData"
+                  :options="chartOptions"
+                />
+                <GChart
+                  type="LineChart"
+                  :data="chartData"
+                  :options="chartOptions"
+                />
               </div>
             </div>
           </div>
           <div class="center col s1" v-for="item in items">
             <div class="card darken-1">
               <div class="card-content black-text">
-                  <h5>{{displayDate(item)}}</h5>
-                <GChart type="ColumnChart" :data="chartData" :options="chartOptions" />
-                 <GChart type="LineChart" :data="chartData" :options="chartOptions" />
+                <h5>{{ displayDate(item) }}</h5>
+                <GChart
+                  type="ColumnChart"
+                  :data="chartData"
+                  :options="chartOptions"
+                />
+                <GChart
+                  type="LineChart"
+                  :data="chartData"
+                  :options="chartOptions"
+                />
               </div>
             </div>
           </div>
-          
         </div>
       </div>
     </div>
-    </div>
-
+  </div>
 </template>
 
 <script>
@@ -49,7 +61,14 @@ export default {
   data() {
     return {
       // Array will be automatically processed with visualization.arrayToDataTable function
-      items: [new Date(2019,8,22), new Date(2019,8,23), new Date(2019,8,24), new Date(2019,8,25), new Date(2019,8,26), new Date(2019,8,27)],
+      items: [
+        new Date(2019, 8, 22),
+        new Date(2019, 8, 23),
+        new Date(2019, 8, 24),
+        new Date(2019, 8, 25),
+        new Date(2019, 8, 26),
+        new Date(2019, 8, 27)
+      ],
       containerClass: "container",
       chartType: this.type,
       chartData: this.array1,
@@ -105,8 +124,8 @@ export default {
     isGauge: function() {
       return this.chartType === "Gauge";
     },
-    displayDate: function (date) {
-       return  date.getMonth() + "/" + date.getDate();
+    displayDate: function(date) {
+      return date.getMonth() + "/" + date.getDate();
     }
   }
 };

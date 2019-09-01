@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <router-view :key="$route.fullPath"></router-view>
     <!--
    <div class="row">
@@ -67,9 +66,6 @@
     </div>
     -->
   </div>
-  
-
-
 </template>
 
 <script>
@@ -81,9 +77,6 @@ import { mapGetters, mapActions, mapState } from "vuex";
 import DayView from "./components/DayView.vue";
 import Month from "./components/MonthViewComponent";
 
-
-
-
 // Use v-calendar & v-date-picker components
 Vue.use(VCalendar, {
   componentPrefix: "vc"
@@ -94,7 +87,8 @@ export default {
   components: {
     FirstCharts,
     Weekly,
-    VCalendar,DayView
+    VCalendar,
+    DayView
   },
   data() {
     return {
@@ -120,11 +114,10 @@ export default {
   },
   mounted() {
     this.loadApi();
-
   },
   methods: {
-...mapActions(['fetchApiData']),
-...mapActions(['formatDataR']),
+    ...mapActions(["fetchApiData"]),
+    ...mapActions(["formatDataR"]),
 
     forceRerender() {
       // Remove my-component from the DOM
@@ -228,7 +221,7 @@ export default {
       this.finalGauge.push(["Source 2", gaugeArrayDaily[1]]);
       this.finalGauge.push(["Source 3", gaugeArrayDaily[2]]);
 
-     // console.log(sumPowerPerHour);
+      // console.log(sumPowerPerHour);
       //console.log(this.powerArray);
 
       for (let i = 0; i < this.powerArray.length; i++) {
@@ -277,34 +270,27 @@ export default {
       console.log(currentDay < endRange && currentDay > startRange);
       return currentDay <= endRange && currentDay >= startRange;
     }
-  
   },
-  computed : {
-
-    ...mapGetters(['getApiData']),
-   ...mapGetters(['getStructuredData']),
-   ...mapState(['dataStructured'])
-   
-  
+  computed: {
+    ...mapGetters(["getApiData"]),
+    ...mapGetters(["getStructuredData"]),
+    ...mapState(["dataStructured"])
   },
   created() {
     this.fetchApiData();
     var context = this;
-    
-    setTimeout(function(){ context.formatDataR();
-     }, 1500);
-  
+
+    setTimeout(function() {
+      context.formatDataR();
+    }, 1500);
   },
   watch: {
     storeData(value) {
-      console.log('change');
-      
-      this.storeData = value;
-      
+      console.log("change");
 
+      this.storeData = value;
     }
   }
-  
 };
 </script>
 

@@ -7,38 +7,57 @@
         </router-link>
         <router-link
           class="btn center waves-effect waves-light lighten-2"
-          v-bind:class="{disabled: getPreviousDay()}"
-          :to="{ name: 'DayViewWithID', params: { dayToShow: currentDataIndex - 1 }}"
+          v-bind:class="{ disabled: getPreviousDay() }"
+          :to="{
+            name: 'DayViewWithID',
+            params: { dayToShow: currentDataIndex - 1 }
+          }"
         >
           <i class="material-icons">chevron_left</i>
         </router-link>
 
-        <vc-date-picker :popover="{ placement: 'bottom', visibility: 'click' }">
+        <vc-date-picker
+          :popover="{ placement: 'bottom', visibility: 'click' }"
+          :value="getStartDate()"
+        >
           <a class="btn blue waves-effect waves-light">
             <i class="material-icons left">date_range</i>
-            {{structuredDays[currentDataIndex].dayContent.year + "/" + (structuredDays[currentDataIndex].dayContent.month + 1) + "/" + structuredDays[currentDataIndex].dayContent.day}}
+            {{
+              structuredDays[currentDataIndex].dayContent.year +
+                "/" +
+                (structuredDays[currentDataIndex].dayContent.month + 1) +
+                "/" +
+                structuredDays[currentDataIndex].dayContent.day
+            }}
           </a>
 
-          <div slot="day-content" slot-scope="{day}">
+          <div slot="day-content" slot-scope="{ day }">
             <div>
               <div v-if="checkIfDateInRange(day)">
-                <router-link class="btn-small btn-floating teal waves-effect waves-light"
-                  :to="{ name: 'DayViewWithID', params: { dayToShow: getIndexFromDate(day) }}"
-                >{{day.day}}
+                <router-link
+                  class="btn-small btn-floating teal waves-effect waves-light"
+                  :to="{
+                    name: 'DayViewWithID',
+                    params: { dayToShow: getIndexFromDate(day) }
+                  }"
+                  >{{ day.day }}
                 </router-link>
               </div>
 
               <div v-if="!checkIfDateInRange(day)">
-                <span class="waves-effect disabled">{{day.day}}</span>
+                <span class="waves-effect disabled">{{ day.day }}</span>
               </div>
             </div>
           </div>
         </vc-date-picker>
 
         <router-link
-          v-bind:class="{disabled: getNextDay()}"
+          v-bind:class="{ disabled: getNextDay() }"
           class="btn center waves-effect waves-light lighten-2"
-          :to="{ name: 'DayViewWithID', params: { dayToShow: currentDataIndex + 1 }}"
+          :to="{
+            name: 'DayViewWithID',
+            params: { dayToShow: currentDataIndex + 1 }
+          }"
         >
           <i class="material-icons">chevron_right</i>
         </router-link>
@@ -113,29 +132,39 @@ export default {
     };
   },
   methods: {
+    getStartDate() {
+      return new Date(
+        this.structuredDays[0].dayContent.year,
+        this.structuredDays[0].dayContent.month,
+        this.structuredDays[0].dayContent.day
+      );
+    },
+
     checkIfDateInRange: function(day) {
+      var dataRangeLength = this.structuredDays.length - 1;
 
-var dataRangeLength = this.structuredDays.length - 1;
+      var startRange = new Date(
+        this.structuredDays[0].dayContent.year,
+        this.structuredDays[0].dayContent.month,
+        this.structuredDays[0].dayContent.day
+      );
+      var endRange = new Date(
+        this.structuredDays[dataRangeLength].dayContent.year,
+        this.structuredDays[dataRangeLength].dayContent.month,
+        this.structuredDays[dataRangeLength].dayContent.day
+      );
 
-var startRange = new Date(this.structuredDays[0].dayContent.year, this.structuredDays[0].dayContent.month, this.structuredDays[0].dayContent.day);
-var endRange = new Date(this.structuredDays[dataRangeLength].dayContent.year, this.structuredDays[dataRangeLength].dayContent.month, this.structuredDays[dataRangeLength].dayContent.day);
+      var currentDay = new Date(day.year, day.month - 1, day.day);
+      return currentDay <= endRange && currentDay >= startRange;
+    },
+    getIndexFromDate(day) {
+      var dateToLookFor = new Date(day.year, day.month - 1, day.day);
 
-var currentDay = new Date(day.year,day.month - 1,day.day);
-return ((currentDay <= endRange) && (currentDay >= startRange));
+      var i = 0;
+      var found = false;
 
-
-
-},
-getIndexFromDate(day) {
-  
-var dateToLookFor = new Date(day.year, day.month-1, day.day);
-
-
-  var i = 0;
-  var found = false;
-
-  while ((i < this.structuredDays.length) && (!found)) {
-    var selectedDay = new Date(
+      while (i < this.structuredDays.length && !found) {
+        var selectedDay = new Date(
           this.structuredDays[i].dayContent.year,
           this.structuredDays[i].dayContent.month,
           this.structuredDays[i].dayContent.day
@@ -145,14 +174,13 @@ var dateToLookFor = new Date(day.year, day.month-1, day.day);
           return i;
         }
         i++;
-  }
+      }
 
-  if (!found) {
-    console.log("Date Not found in the api");
-    return null;
-    
-  }
-},
+      if (!found) {
+        console.log("Date Not found in the api");
+        return null;
+      }
+    },
     getNextDay() {
       if (this.currentDataIndex + 1 < this.structuredDays.length) return false;
       return true;
@@ -355,5 +383,4 @@ var dateToLookFor = new Date(day.year, day.month-1, day.day);
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
