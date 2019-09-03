@@ -111,12 +111,11 @@ Vue.use(VCalendar, {
 export default {
   name: "DayView",
   components: {
-    FirstCharts,
-    VCalendar
+    FirstCharts
   },
   props: {
     dayToShow: undefined,
-    helloProp: Boolean
+    fromRoute: Boolean
   },
   data() {
     return {
@@ -139,7 +138,6 @@ export default {
         this.structuredDays[0].dayContent.day
       );
     },
-
     checkIfDateInRange: function(day) {
       var dataRangeLength = this.structuredDays.length - 1;
 
@@ -177,7 +175,6 @@ export default {
       }
 
       if (!found) {
-        console.log("Date Not found in the api");
         return null;
       }
     },
@@ -186,189 +183,16 @@ export default {
       return true;
     },
     getPreviousDay() {
-      console.log(this.currentDataIndex - 1 < 0);
-
       if (this.currentDataIndex - 1 < 0) return true;
       return false;
-    },
-    formatDayData(index) {
-      var x = index;
-
-      var sumPowerArray = [];
-      var sumPowerPerHour = [];
-      var totalPowerPerDay = 0;
-      var gaugeArrayDaily = [];
-
-      for (
-        var i = 0;
-        i < this.structuredDays[x].dayContent.resourcePlan.length;
-        i++
-      ) {
-        this.idArray.push(
-          this.structuredDays[x].dayContent.resourcePlan[i].resourceID
-        );
-        this.powerArray.push(
-          this.structuredDays[x].dayContent.resourcePlan[i].powerGeneration
-        );
-      }
-      var initial = ["Hour"];
-      for (var k = 0; k < this.idArray.length; k++) {
-        initial.push("#" + this.idArray[k]);
-      }
-      this.final.push(initial);
-      for (var j = 0; j < 24; j++) {
-        var current = [
-          new Date(
-            this.structuredDays[x].dayContent.year,
-            this.structuredDays[x].dayContent.month,
-            this.structuredDays[x].dayContent.day,
-            j,
-            0,
-            0
-          )
-        ];
-        for (var i = 0; i < this.idArray.length; i++) {
-          current.push(this.powerArray[i][j]);
-        }
-        this.final.push(current);
-      }
-
-      for (let i = 0; i < this.powerArray.length; i++) {
-        var currentDay = 0;
-        for (let j = 0; j < 24; j++) {
-          currentDay += this.powerArray[i][j];
-        }
-        sumPowerArray.push(currentDay);
-      }
-
-      for (let i = 0; i < 24; i++) {
-        var hourlyUsage = 0;
-        for (let j = 0; j < this.powerArray.length; j++) {
-          hourlyUsage += this.powerArray[j][i];
-        }
-        sumPowerPerHour.push(hourlyUsage);
-      }
-
-      for (let i = 0; i < sumPowerArray.length; i++) {
-        totalPowerPerDay += sumPowerArray[i];
-      }
-      for (let i = 0; i < sumPowerArray.length; i++) {
-        gaugeArrayDaily.push(
-          this.getWholePercent(sumPowerArray[i], totalPowerPerDay)
-        );
-      }
-
-      this.dataForGaugeAndPieChart.push(["Label", "Value"]);
-
-      for (var i = 0; i < this.idArray.length; i++) {
-        this.dataForGaugeAndPieChart.push([
-          "Source " + this.idArray[i],
-          gaugeArrayDaily[i]
-        ]);
-      }
-
-      console.log(sumPowerPerHour);
-      console.log(this.powerArray);
-
-      for (let i = 0; i < this.powerArray.length; i++) {
-        var currentResource = [];
-        for (let j = 0; j < 24; j++)
-          currentResource.push(
-            this.getWholePercent(this.powerArray[i][j], sumPowerPerHour[j])
-          );
-        this.hourlyPercentagePerResource.push(currentResource);
-      }
-
-      var initial = ["Hour"];
-      for (var k = 0; k < this.idArray.length; k++) {
-        initial.push("#" + this.idArray[k]);
-      }
-      this.finalPercentage.push(initial);
-      for (var j = 0; j < 24; j++) {
-        var current = [
-          new Date(
-            this.structuredDays[x].dayContent.year,
-            this.structuredDays[x].dayContent.month,
-            this.structuredDays[x].dayContent.day,
-            j,
-            0,
-            0
-          )
-        ];
-        for (var i = 0; i < this.idArray.length; i++) {
-          current.push(this.hourlyPercentagePerResource[i][j]);
-        }
-        this.finalPercentage.push(current);
-      }
-    },
-    getWholePercent: function(percentFor, percentOf) {
-      return Math.round((percentFor / percentOf) * 100);
-    },
-
-    forceRerender() {
-      // Remove my-component from the DOM
-      this.renderComponent = false;
-
-      this.$nextTick(() => {
-        // Add the component back in
-        this.renderComponent = true;
-      });
-    },
-
-    setStacked: function() {
-      if (this.chartOptions.isStacked) {
-        this.chartOptions.isStacked = false;
-      } else {
-        this.chartOptions.isStacked = true;
-      }
-      this.forceRerender();
-    },
-    setLines: function() {
-      this.chartType = "LineChart";
-      this.forceRerender();
-    },
-    setColumns: function() {
-      this.chartType = "ColumnChart";
-      this.forceRerender();
-    },
-    isGauge: function() {
-      return this.chartType === "Gauge";
-    },
-    displayDate: function(date) {
-      return date.getMonth() + "/" + date.getDate();
-    },
-    getDayIndex: function(selector) {
-      var dateToLookFor = new Date(selector[0], selector[1], selector[2]);
-      console.log(dateToLookFor);
-      var i = 0;
-      while (
-        new Date(
-          this.structuredDays[i].dayContent.year,
-          this.structuredDays[i].dayContent.month,
-          this.structuredDays[i].dayContent.day
-        ).getTime() != dateToLookFor.getTime() &&
-        i < this.structuredDays.length
-      ) {
-        i++;
-        console.log(i);
-      }
-      console.log(i);
-      return i;
     }
   },
   created() {
-    var index = 0;
-    if (this.helloProp) {
+    if (this.fromRoute) {
       this.currentDataIndexComp = this.$route.params.dayToShow;
     } else {
       this.currentDataIndexComp = 0;
     }
-    if (this.currentDataIndex == 0) {
-      this.formatDayData(0);
-    } else {
-      this.formatDayData(this.currentDataIndex);
-    }
-    console.log(this.getNextDay());
   },
   computed: {
     currentDataIndexComp: {

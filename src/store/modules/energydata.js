@@ -1,7 +1,7 @@
 import axios from "axios";
-import { stat } from "fs";
 
 const state = {
+  apiUrl: "https://api.myjson.com/bins/1h9xej",
   apiData: {},
   dataStructured: [],
   startRange: {},
@@ -21,8 +21,9 @@ const getters = {
 };
 const actions = {
   async fetchApiData({ commit }) {
-    const response = await axios.get("https://api.myjson.com/bins/gwzev");
+    const response = await axios.get(state.apiUrl);
     //   https://api.myjson.com/bins/ahcg3
+    // https://api.myjson.com/bins/gwzev
     commit("setApiData", response.data);
     var dataStructured = [];
     for (let index = 0; index < state.apiData.data.length; index++) {
@@ -42,7 +43,7 @@ const actions = {
     var pourcentageDailyData = [];
     var gaugeUsageData = [];
     var colDailyUsageperSource = [];
-    for (var index = 0; index < state.dataStructured.length; index++) {
+    for (let index = 0; index < state.dataStructured.length; index++) {
       var readyDataForExport = [];
       var idArray = [];
       var powerArray = [];
@@ -56,7 +57,7 @@ const actions = {
       var colorfulDailyUsagePerSource = [];
       //Hourly Usage data preparation
       for (
-        var i = 0;
+        let i = 0;
         i < state.dataStructured[index].dayContent.resourcePlan.length;
         i++
       ) {
@@ -68,7 +69,7 @@ const actions = {
         );
       }
       var initial = ["Hour"];
-      for (var k = 0; k < idArray.length; k++) {
+      for (let k = 0; k < idArray.length; k++) {
         initial.push("#" + idArray[k]);
       }
       readyDataForExport.push(initial);
@@ -120,13 +121,13 @@ const actions = {
       //dataForGaugeAndPieChart contains data formated for Pie and Gauge chart usage, pourcentages of usage per source for one day
       dataForGaugeAndPieChart.push(["Label", "Value"]);
 
-      for (var i = idArray.length - 1; i >= 0; i--) {
+      for (let i = idArray.length - 1; i >= 0; i--) {
         dataForGaugeAndPieChart.push(["# " + idArray[i], gaugeArrayDaily[i]]);
       }
       gaugeUsageData.push(dataForGaugeAndPieChart);
 
-      var initial = ["Day"];
-      for (var i = idArray.length - 1; i >= 0; i--) {
+      initial = ["Day"];
+      for (let i = idArray.length - 1; i >= 0; i--) {
         initial.push("# " + idArray[i]);
       }
       colorfulDailyUsagePerSource.push(initial);
@@ -135,10 +136,9 @@ const actions = {
      colorfulDailyUsagePerSource.push(["#" + idArray[k],gaugeArrayDaily[k]]);
       }
       */
-      var initial2 = ["Sources"];
-      for (var k = 0; k < idArray.length; k++)
-        initial2.push(gaugeArrayDaily[k]);
-      colorfulDailyUsagePerSource.push(initial2);
+      initial = ["Sources"];
+      for (let k = 0; k < idArray.length; k++) initial.push(gaugeArrayDaily[k]);
+      colorfulDailyUsagePerSource.push(initial);
 
       colDailyUsageperSource.push(colorfulDailyUsagePerSource);
 
@@ -153,13 +153,13 @@ const actions = {
         hourlyPercentagePerResource.push(currentResource);
       }
 
-      var initial = ["Hour"];
-      for (var k = 0; k < idArray.length; k++) {
+      initial = ["Hour"];
+      for (let k = 0; k < idArray.length; k++) {
         initial.push("#" + idArray[k]);
       }
       percentHourly.push(initial);
-      for (var j = 0; j < 24; j++) {
-        var current = [
+      for (let j = 0; j < 24; j++) {
+        current = [
           new Date(
             state.dataStructured[index].dayContent.year,
             state.dataStructured[index].dayContent.month,
@@ -169,7 +169,7 @@ const actions = {
             0
           )
         ];
-        for (var i = 0; i < idArray.length; i++) {
+        for (let i = 0; i < idArray.length; i++) {
           current.push(hourlyPercentagePerResource[i][j]);
         }
         percentHourly.push(current);

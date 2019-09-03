@@ -2,7 +2,6 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./components/Home.vue";
 import DayView from "./components/DayView.vue";
-import Weekly from "./components/Weekly.vue";
 import MonthView from "./components/MonthViewComponent.vue";
 
 Vue.use(Router);
@@ -25,7 +24,7 @@ export default new Router({
       path: "/Daily/:dayToShow",
       name: "DayViewWithID",
       component: DayView,
-      props: { helloProp: true }
+      props: { fromRoute: true }
     },
     {
       path: "/Month",

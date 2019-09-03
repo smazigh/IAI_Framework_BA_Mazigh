@@ -19,7 +19,7 @@
               </div>
             </div>
           </div>
-          <div class="center col s1" v-for="item in items">
+          <div class="center col s1" v-for="item in items" v-bind:key="item">
             <div class="card darken-1">
               <div class="card-content black-text">
                 <h5>{{ displayDate(item) }}</h5>

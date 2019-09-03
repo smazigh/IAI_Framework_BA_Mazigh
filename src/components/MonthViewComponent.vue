@@ -15,6 +15,7 @@
           :from-date="new Date(2019, 7, 1)"
           transition="fade"
           navVisibility="hover"
+          is-expanded
         >
           <div slot="day-content" slot-scope="{ day }">
             <div>
@@ -60,7 +61,6 @@
 <script>
 import Vue from "vue";
 import FirstCharts from "./FirstCharts";
-import Weekly from "./Weekly.vue";
 import VCalendar from "v-calendar";
 
 // Use v-calendar & v-date-picker components
@@ -71,9 +71,7 @@ Vue.use(VCalendar, {
 export default {
   name: "MonthViewComponent",
   components: {
-    FirstCharts,
-    Weekly,
-    VCalendar
+    FirstCharts
   },
   props: {
     mainApiData: undefined,
@@ -120,144 +118,8 @@ export default {
       }
 
       if (!found) {
-        console.log("Date Not found in the api");
         return null;
       }
-    },
-
-    // This method generates the Graphic data for comp usage
-    // generated data can be used in Lines/Column charts
-    // displays Hourly usage for all resources for a specific day
-    getHourlyUsageForColorLines(day) {
-      var index = this.getIndexFromDate(day);
-
-      var readyDataForExport = [];
-      var idArray = [];
-      var powerArray = [];
-      for (
-        var i = 0;
-        i < this.structuredDays[index].dayContent.resourcePlan.length;
-        i++
-      ) {
-        idArray.push(
-          this.structuredDays[index].dayContent.resourcePlan[i].resourceID
-        );
-        powerArray.push(
-          this.structuredDays[index].dayContent.resourcePlan[i].powerGeneration
-        );
-      }
-      var initial = ["Hour"];
-      for (var k = 0; k < idArray.length; k++) {
-        initial.push("#" + idArray[k]);
-      }
-      readyDataForExport.push(initial);
-      for (var j = 0; j < 24; j++) {
-        var current = [
-          new Date(
-            this.structuredDays[index].dayContent.year,
-            this.structuredDays[index].dayContent.month,
-            this.structuredDays[index].dayContent.day,
-            j,
-            0,
-            0
-          )
-        ];
-        for (var i = 0; i < idArray.length; i++) {
-          current.push(powerArray[i][j]);
-        }
-        readyDataForExport.push(current);
-      }
-
-      return readyDataForExport;
-    },
-
-    formatData: function() {
-      for (var i = 0; i < this.apiData.data[0].resourcePlan.length; i++) {
-        this.idArray.push(this.apiData.data[0].resourcePlan[i].resourceID);
-        this.powerArray.push(
-          this.apiData.data[0].resourcePlan[i].powerGeneration
-        );
-      }
-      var Combined = new Array(this.powerArray.length + 1);
-      var initial = ["Hour"];
-      for (var k = 0; k < this.idArray.length; k++) {
-        initial.push("#" + this.idArray[k]);
-      }
-      this.final.push(initial);
-      for (var j = 0; j < 24; j++) {
-        var current = [
-          new Date(
-            this.apiData.data[0].year,
-            this.apiData.data[0].month,
-            this.apiData.data[0].day,
-            j,
-            0,
-            0
-          )
-        ];
-        for (var i = 0; i < this.idArray.length; i++) {
-          current.push(this.powerArray[i][j]);
-        }
-        this.final.push(current);
-      }
-    },
-    formatPercentages: function() {
-      var sumPowerArray = [];
-      var sumPowerPerHour = [];
-      var totalPowerPerDay = 0;
-      var gaugeArrayDaily = [];
-      for (let i = 0; i < this.powerArray.length; i++) {
-        var currentDay = 0;
-        for (let j = 0; j < 24; j++) {
-          currentDay += this.powerArray[i][j];
-        }
-        sumPowerArray.push(currentDay);
-      }
-      for (let i = 0; i < 24; i++) {
-        var hourlyUsage = 0;
-        for (let j = 0; j < this.powerArray.length; j++) {
-          hourlyUsage += this.powerArray[j][i];
-        }
-        sumPowerPerHour.push(hourlyUsage);
-      }
-      for (let i = 0; i < sumPowerArray.length; i++) {
-        totalPowerPerDay += sumPowerArray[i];
-      }
-      for (let i = 0; i < sumPowerArray.length; i++) {
-        gaugeArrayDaily.push(
-          this.getWholePercent(sumPowerArray[i], totalPowerPerDay)
-        );
-      }
-
-      this.finalGauge.push(["Label", "Value"]);
-      this.finalGauge.push(["Source 1", gaugeArrayDaily[0]]);
-      this.finalGauge.push(["Source 2", gaugeArrayDaily[1]]);
-      this.finalGauge.push(["Source 3", gaugeArrayDaily[2]]);
-
-      for (let i = 0; i < this.powerArray.length; i++) {
-        var currentResource = [];
-        for (let j = 0; j < 24; j++)
-          currentResource.push(
-            this.getWholePercent(this.powerArray[i][j], sumPowerPerHour[j])
-          );
-        this.hourlyPercentagePerResource.push(currentResource);
-      }
-
-      var initial = ["Hour"];
-      for (var k = 0; k < this.idArray.length; k++) {
-        initial.push("#" + this.idArray[k]);
-      }
-      this.finalPercentage.push(initial);
-      for (var j = 0; j < 24; j++) {
-        var current = [new Date(0, 0, 0, j, 0, 0)];
-        for (var i = 0; i < this.idArray.length; i++) {
-          current.push(this.hourlyPercentagePerResource[i][j]);
-        }
-        this.finalPercentage.push(current);
-      }
-    },
-    getWholePercent: function(percentFor, percentOf) {
-      return Math.round((percentFor / percentOf) * 100);
     },
 
     checkIfDateInRange: function(day) {
