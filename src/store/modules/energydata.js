@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const state = {
-  apiUrl: "https://api.myjson.com/bins/1h9xej",
+  apiUrl: "https://api.myjson.com/bins/osnm1",  
   apiData: {},
   dataStructured: [],
   startRange: {},
@@ -24,6 +24,8 @@ const actions = {
     const response = await axios.get(state.apiUrl);
     //   https://api.myjson.com/bins/ahcg3
     // https://api.myjson.com/bins/gwzev
+
+    // https://api.myjson.com/bins/1h9xej
     commit("setApiData", response.data);
     var dataStructured = [];
     for (let index = 0; index < state.apiData.data.length; index++) {

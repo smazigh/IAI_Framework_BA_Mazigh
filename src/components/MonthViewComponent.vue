@@ -12,7 +12,7 @@
         <vc-calendar
           class="container"
           :attributes="attributes"
-          :from-date="new Date(2019, 7, 1)"
+          :from-date="new Date(2019, 10, 1)"
           transition="fade"
           navVisibility="hover"
           is-expanded
@@ -88,10 +88,7 @@ export default {
       apiData: this.mainApiData,
       attributes: [
         {
-          key: new Date(2016, 6, 1),
-          dates: [
-            { start: new Date(2019, 7, 1), end: new Date(2019, 9, 1) } // # of days
-          ]
+ 
         }
       ]
     };

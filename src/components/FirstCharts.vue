@@ -10,6 +10,8 @@
           :data="chartData"
           :options="chartOptions"
           :settings="{ packages: ['corechart', 'gauge', 'timeline'] }"
+            :events="chartEvents"
+            ref="gChart"
         />
       </div>
       <div class="card-action">
@@ -31,6 +33,15 @@
           v-bind:class="{ red: chartOptions.isStacked }"
           ><i class="material-icons left">view_column</i>Stacked</a
         >
+
+       <button id="show-modal" @click="showModal = true">Show Modal</button>
+  <!-- use the modal component, pass in the prop -->
+      <Resource v-if="showModal" @close="showModal = false">
+    <!--
+      you can use custom content here to overwrite
+      default content
+    -->
+  </Resource>
       </div>
     </div>
 
@@ -43,20 +54,21 @@
       :options="chartOptions"
       :settings="{ packages: ['corechart', 'gauge', 'timeline'] }"
     />
+
   </div>
 </template>
 
 <script>
 import { GChart } from "vue-google-charts";
+import Resource from "./Resource";
 
 export default {
   name: "FirstCharts",
   components: {
-    GChart
+    GChart,Resource
   },
   props: {
     array1: Array,
-    array2: Array,
     isStack: Boolean,
     type: String,
     titleChart: String,
@@ -66,12 +78,13 @@ export default {
   data() {
     return {
       // Array will be automatically processed with visualization.arrayToDataTable function
-      containerClass: "container",
+      showModal: false,
       chartType: this.type,
       chartData: this.array1,
       chartOptions: {
         isStacked: false,
         title: this.title,
+        // series: {0: {type: 'line'}},
         animation: {
           duration: 1500,
           startup: true,
@@ -85,7 +98,16 @@ export default {
         greenFrom: 20,
         greenTo: 60
       },
-      renderComponent: true
+      renderComponent: true,
+        chartEvents: {
+       select: () => {          
+          const table = this.$refs.gChart.chartObject;
+          const selection = table.getSelection(); 
+          console.log(selection);
+                   
+          
+        }
+      }
     };
   },
   methods: {
