@@ -34,8 +34,7 @@
           ><i class="material-icons left">view_column</i>Stacked</a
         >
 
-       <button id="show-modal" @click="showModal = true">Show Modal</button>
-  <!-- use the modal component, pass in the prop -->
+ 
       <Resource v-if="showModal" @close="showModal = false">
     <!--
       you can use custom content here to overwrite
@@ -103,7 +102,7 @@ export default {
        select: () => {          
           const table = this.$refs.gChart.chartObject;
           const selection = table.getSelection(); 
-          console.log(selection);
+          this.showModal = true;
                    
           
         }

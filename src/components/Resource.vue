@@ -8,18 +8,30 @@
             <slot name="header">
               
               <div class="row">
-                  <h4>Resource View for #2</h4>
-           <div>
-  <b-dropdown id="dropdown-1" text="Dropdown Button" class="m-md-2">
-    <b-dropdown-item>First Action</b-dropdown-item>
-    <b-dropdown-item>Second Action</b-dropdown-item>
-    <b-dropdown-item>Third Action</b-dropdown-item>
-    <b-dropdown-divider></b-dropdown-divider>
-    <b-dropdown-item active>Active action</b-dropdown-item>
-    <b-dropdown-item disabled>Disabled action</b-dropdown-item>
-  </b-dropdown>
+                <div class="col s6 m6 l6">
+                  <span class="card-title">Resource View for #2</span>
+                </div>
+                  
+           <div class="col s3 m3 l3">
+            <paper-dropdown-menu label="Time Period">
+                  <paper-listbox slot="dropdown-content" selected="0">
+                    <paper-item>5 Days</paper-item>
+                    <paper-item>1 Day</paper-item>
+                    <paper-item>30 Days</paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu>
 </div>
-              <a class='dropdown-trigger btn green right' href='#' data-target='dropdown1'>5 Days</a>
+
+     <div class="col s3 m3 l3">
+            <paper-dropdown-menu label="Resource">
+                  <paper-listbox slot="dropdown-content" selected="0">
+                    <paper-item>#1</paper-item>
+                    <paper-item>#2</paper-item>
+                    <paper-item>#3</paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+</div>
+            
    
         </div>
         <div>

@@ -7,6 +7,15 @@ import "materialize-css/dist/css/materialize.min.css";
 import router from "./router";
 import store from "./store";
 import VCalendar from "v-calendar";
+import '@polymer/paper-dropdown-menu/paper-dropdown-menu.js'; 
+import '@polymer/paper-item/paper-item.js';
+import '@polymer/paper-listbox/paper-listbox.js';
+
+
+import vSelect from 'vue-select'
+
+Vue.component('v-select', vSelect);
+import 'vue-select/dist/vue-select.css';
 
 import { DropdownPlugin } from "bootstrap-vue";
 Vue.use(DropdownPlugin);
