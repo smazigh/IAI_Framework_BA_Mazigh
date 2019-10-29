@@ -89,7 +89,7 @@ export default {
 
     setTimeout(function() {
       context.formatDataR();
-    }, 1500);
+    }, 3500);
   }
 };
 </script>
@@ -102,6 +102,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 0px;
-  background-image: "./assets/background.jpg";
+  height: 100%;
+  width: 100%;
 }
 </style>

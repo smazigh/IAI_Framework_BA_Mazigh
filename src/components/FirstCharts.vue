@@ -2,7 +2,7 @@
   <div>
     <div v-show="tileSize == 'day'" class="card darken-1">
       <div class="card-content black-text">
-        <span class="card-title align-center">{{ title }}</span>
+        <span class="card-title align-center">{{ this.title }}</span>
         <GChart
           v-bind:class="{ container: isGauge() }"
           v-if="renderComponent"
@@ -19,26 +19,26 @@
           class="waves-effect waves-light btn-small "
           v-on:click="setLines"
           v-bind:class="{ red: isLines() }"
-          ><i class="material-icons left">timeline</i>Lines</a
+          ><i class="material-icons left">timeline</i><span class="hide-on-small-only">Lines</span></a
         >
         <a
           class="waves-effect waves-light btn-small "
           v-on:click="setColumns"
           v-bind:class="{ red: isColumns() }"
-          ><i class="material-icons left">assessment</i>Column</a
+          ><i class="material-icons left">assessment</i><span class="hide-on-small-only">Column</span></a
         >
         <a
           class="waves-effect waves-light btn-small "
           v-on:click="setStacked"
           v-bind:class="{ red: chartOptions.isStacked }"
-          ><i class="material-icons left">view_column</i>Stacked</a
+          ><i class="material-icons left">view_column</i><span class="hide-on-small-only">Stacked</span></a
         >
 
  
-      <Resource v-if="showModal" @close="showModal = false">
+      <Resource :resourceID="resourceSelected" :timeP="timePeriod" v-if="showModal" @close="showModal = false">
     <!--
       you can use custom content here to overwrite
-      default content
+      default content 
     -->
   </Resource>
       </div>
@@ -50,7 +50,7 @@
       v-if="renderComponent"
       :type="chartType"
       :data="chartData"
-      :options="chartOptions"
+      :options="chartOptionsUpdate"
       :settings="{ packages: ['corechart', 'gauge', 'timeline'] }"
     />
 
@@ -62,7 +62,7 @@ import { GChart } from "vue-google-charts";
 import Resource from "./Resource";
 
 export default {
-  name: "FirstCharts",
+  name: "Chart",
   components: {
     GChart,Resource
   },
@@ -71,22 +71,31 @@ export default {
     isStack: Boolean,
     type: String,
     titleChart: String,
-    title: undefined,
-    tileSize: String
+    title: String,
+    tileSize: String,
+    animation: {
+      type:Boolean,
+      default:true},
+    animationType: String,
+    colors: Array
+    
+   
   },
   data() {
     return {
       // Array will be automatically processed with visualization.arrayToDataTable function
       showModal: false,
+      resourceSelected : 0,
+      timePeriod: 30,
       chartType: this.type,
       chartData: this.array1,
       chartOptions: {
         isStacked: false,
-        title: this.title,
+        title: this.titleChart,
         // series: {0: {type: 'line'}},
         animation: {
           duration: 1500,
-          startup: true,
+          startup: this.animation,
           easing: "inAndOut"
         },
 
@@ -102,6 +111,7 @@ export default {
        select: () => {          
           const table = this.$refs.gChart.chartObject;
           const selection = table.getSelection(); 
+          this.selectedResource = selection[0].column - 1;
           this.showModal = true;
                    
           
@@ -146,12 +156,36 @@ export default {
     },
     isGauge: function() {
       return this.chartType === "Gauge";
+    },
+    adjustResource: function (value){
+      this.selectedResource = value;
+    }, 
+    adjustTimePeriod: function(value) {
+      this.selectedTimePeriod = value;
+    }
+  },
+  computed: {
+    selectedResource:{
+      get: function() {
+        return this.resourceSelected;
+      },
+      set: function(value) {
+        this.resourceSelected = value;
+      }
+    },
+    chartOptionsUpdate: {
+      get: function() {
+      if (this.colors != null)
+        this.chartOptions.colors = this.colors;
+
+        return this.chartOptions;
+      }
     }
   }
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+
 <style scoped>
 h3 {
   margin: 40px 0 0;
@@ -169,4 +203,7 @@ li {
   height: 400px;
   overflow: hidden;
 }
+
+
+
 </style>

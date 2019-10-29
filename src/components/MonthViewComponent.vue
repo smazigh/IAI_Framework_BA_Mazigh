@@ -1,10 +1,16 @@
 <template>
   <div>
     <div class="card darken-1">
-      <div class="card-action">
+      <div class=" container navbar">
         <router-link to="/" class="btn-floating left waves-effect waves-light">
           <i class="material-icons left">home</i>
         </router-link>
+         <paper-dropdown-menu label="Time period" class=" right ">
+                  <paper-listbox class="" slot="dropdown-content" selected="1">
+                    <paper-item><router-link to="/Daily">Day</router-link></paper-item>
+                    <paper-item><router-link to="/Month">Month</router-link></paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu>
       </div>
     </div>
     <div class="row">
@@ -26,7 +32,7 @@
                     name: 'DayViewWithID',
                     params: { dayToShow: getIndexFromDate(day) }
                   }"
-                  ><FirstCharts
+                  ><Chart
                     tileSize="month"
                     v-bind:array1="
                       $store.getters.getColDayPercUsageData[
@@ -34,7 +40,7 @@
                       ]
                     "
                     type="ColumnChart"
-                    titleChart="Seifoun ta7foun"
+                    titleChart=""
                 /></router-link>
               </div>
 
@@ -60,7 +66,7 @@
 
 <script>
 import Vue from "vue";
-import FirstCharts from "./FirstCharts";
+import Chart from "./FirstCharts";
 import VCalendar from "v-calendar";
 
 // Use v-calendar & v-date-picker components
@@ -71,7 +77,7 @@ Vue.use(VCalendar, {
 export default {
   name: "MonthViewComponent",
   components: {
-    FirstCharts
+    Chart
   },
   props: {
     mainApiData: undefined,

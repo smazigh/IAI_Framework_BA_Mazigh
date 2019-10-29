@@ -1,12 +1,12 @@
-<template>
+<template >
   <div>
-    <div class="card darken-1">
-      <div class="card-action">
-        <router-link to="/" class="btn-floating left">
-          <i class="material-icons left waves-effect waves-light">home</i>
+    <div class="card  darken-5">
+      <div class="row card-action">
+        <router-link to="/" class="btn-floating left valign-center">
+          <i class="material-icons left waves-effect waves-light " >home</i>
         </router-link>
         <router-link
-          class="btn center waves-effect waves-light lighten-2"
+          class="btn waves-effect waves-light lighten-2 "
           v-bind:class="{ disabled: getPreviousDay() }"
           :to="{
             name: 'DayViewWithID',
@@ -20,7 +20,7 @@
           :popover="{ placement: 'bottom', visibility: 'click' }"
           :value="getStartDate()"
         >
-          <a class="btn blue waves-effect waves-light">
+          <a class="btn blue waves-effect waves-light  ">
             <i class="material-icons left">date_range</i>
             {{
               structuredDays[currentDataIndex].dayContent.year +
@@ -53,7 +53,7 @@
 
         <router-link
           v-bind:class="{ disabled: getNextDay() }"
-          class="btn center waves-effect waves-light lighten-2"
+          class="btn center waves-effect waves-light lighten-2 "
           :to="{
             name: 'DayViewWithID',
             params: { dayToShow: currentDataIndex + 1 }
@@ -61,37 +61,73 @@
         >
           <i class="material-icons">chevron_right</i>
         </router-link>
-      </div>
-    </div>
+         <paper-dropdown-menu label="Time period" class=" right ">
+                  <paper-listbox class="" slot="dropdown-content" selected="0">
+                    <paper-item><router-link to="/Daily"><span>Day</span></router-link></paper-item>
+                    <paper-item><router-link to="/Month"><span>Month</span></router-link></paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu>
 
+ 
+
+                
+        
+      </div>
+      
+    </div>
+<!-- For Demo purposes -->
+<!-- First View in the daily-layout -->
     <div class="row">
       <div class="col s12 m12 l12">
-        <FirstCharts
+        <Chart
           v-bind:array1="$store.getters.getHourlyUsage[currentDataIndex]"
           type="AreaChart"
           title="Usage per Hour"
-          titleChart="Seifoun ta7foun"
           tileSize="day"
+          v-bind:animation="false"
+          titleChart="Repartition "
+          v-bind:colors="['red','blue','gold','green']"
+        
         />
       </div>
     </div>
+
+    <!-- Second View in the daily-layout -->
     <div class="row">
-      <div class="col s12 m6 l6">
-        <FirstCharts
+      <div class="col s12 m6 l4">
+        <Chart
           v-bind:array1="$store.getters.getPercenHourData[currentDataIndex]"
           type="ColumnChart"
           title="Pourcentages per Hour"
-          titleChart="Seifoun ta7foun"
+        
           tileSize="day"
+          
         />
       </div>
-      <div class="col s12 m6 l6">
-        <FirstCharts
+      <!-- Third View in the daily-layout -->
+      <div class="col s12 m6 l4">
+        <Chart
           v-bind:array1="$store.getters.getGaugeUsageData[currentDataIndex]"
           type="PieChart"
           title="Resource Load"
-          titleChart="Seifoun ta7foun"
           tileSize="day"
+         
+        />
+      </div>
+      <div class="col s12 m6 l4">
+        <Chart
+          v-bind:array1="$store.getters.getColDayPercUsageData[currentDataIndex]"
+          type="Gauge"
+          title="Resource Load"
+          tileSize="month"
+         
+        />
+         <Chart
+          v-bind:array1="$store.getters.getGaugeUsageData[currentDataIndex]"
+          type="LineChart"
+          title="Resource Load"
+          tileSize="month"
+         
         />
       </div>
     </div>
@@ -100,7 +136,7 @@
 
 <script>
 import Vue from "vue";
-import FirstCharts from "./FirstCharts";
+import Chart from "./FirstCharts";
 import VCalendar from "v-calendar";
 
 // Use v-calendar & v-date-picker components
@@ -111,7 +147,7 @@ Vue.use(VCalendar, {
 export default {
   name: "DayView",
   components: {
-    FirstCharts
+    Chart
   },
   props: {
     dayToShow: undefined,
@@ -207,4 +243,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.adjust{
+ display: inline-block;
+  width: 150px;
+  height: 70px;
+  padding: 0px;
+}
+</style>

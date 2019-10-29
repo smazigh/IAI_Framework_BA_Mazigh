@@ -1,8 +1,12 @@
 import axios from "axios";
+import { stat } from "fs";
 
 const state = {
   apiUrl: "https://api.myjson.com/bins/osnm1",  
+  resourceUrl: "https://api.myjson.com/bins/17pw4k",
   apiData: {},
+  apiResourceData: [],
+  resourceData: [],
   dataStructured: [],
   startRange: {},
   endRange: {},
@@ -17,17 +21,17 @@ const getters = {
   getHourlyUsage: state => state.fullHourlyUsage,
   getGaugeUsageData: state => state.fullGaugeUsage,
   getPercenHourData: state => state.percHourUsageData,
-  getColDayPercUsageData: state => state.colDayPercUsageData
+  getColDayPercUsageData: state => state.colDayPercUsageData,
+  getResourceData : stat => state.resourceData
 };
 const actions = {
   async fetchApiData({ commit }) {
     const response = await axios.get(state.apiUrl);
-    //   https://api.myjson.com/bins/ahcg3
-    // https://api.myjson.com/bins/gwzev
-
-    // https://api.myjson.com/bins/1h9xej
+    const responseResource = await axios.get(state.resourceUrl);
     commit("setApiData", response.data);
+    commit("setResourceData",responseResource.data.data);
     var dataStructured = [];
+    var localResourceStructured = [];
     for (let index = 0; index < state.apiData.data.length; index++) {
       dataStructured.push({
         id: new Date(
@@ -39,6 +43,7 @@ const actions = {
       });
     }
     commit("setStructuredData", dataStructured);
+
   },
   formatDataR({ commit }) {
     var hourlyUsageData = [];
@@ -191,7 +196,8 @@ const mutations = {
   setHourlyUsageData: (state, data) => (state.fullHourlyUsage = data),
   setGaugeUsageData: (state, data) => (state.fullGaugeUsage = data),
   setPerHourUsageData: (state, data) => (state.percHourUsageData = data),
-  setColDailyUsage: (state, data) => (state.colDayPercUsageData = data)
+  setColDailyUsage: (state, data) => (state.colDayPercUsageData = data),
+  setResourceData: (state, data) => (state.resourceData = data)
 };
 
 export default {
