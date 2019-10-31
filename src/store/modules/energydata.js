@@ -2,6 +2,7 @@ import axios from "axios";
 import { stat } from "fs";
 
 const state = {
+  //set the API urls here 
   apiUrl: "https://api.myjson.com/bins/osnm1",  
   resourceUrl: "https://api.myjson.com/bins/17pw4k",
   apiData: {},

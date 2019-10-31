@@ -77,7 +77,8 @@ export default {
       type:Boolean,
       default:true},
     animationType: String,
-    colors: Array
+    colors: Array,
+    showLoad : Boolean
     
    
   },
@@ -92,7 +93,6 @@ export default {
       chartOptions: {
         isStacked: false,
         title: this.titleChart,
-        // series: {0: {type: 'line'}},
         animation: {
           duration: 1500,
           startup: this.animation,
@@ -178,9 +178,20 @@ export default {
       if (this.colors != null)
         this.chartOptions.colors = this.colors;
 
+
+//put the load in the #0 source 
+        if (this.showLoad != null) {
+          if (this.showLoad == true) 
+            this.chartOptions.series = {0: {type: 'line'}};
+        }
+
         return this.chartOptions;
       }
-    }
+    },
+    
+        
+      
+    
   }
 };
 </script>

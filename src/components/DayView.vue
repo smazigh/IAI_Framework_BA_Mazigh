@@ -1,12 +1,15 @@
 <template >
   <div>
     <div class="card  darken-5">
-      <div class="row card-action">
+      <div class="row card-action flex">
+        <div class="col l4 m4 s4">
         <router-link to="/" class="btn-floating left valign-center">
           <i class="material-icons left waves-effect waves-light " >home</i>
         </router-link>
+        </div>
+        <div class="col l4 m4 s8">
         <router-link
-          class="btn waves-effect waves-light lighten-2 "
+          class="btn waves-effect waves-light lighten-2 center"
           v-bind:class="{ disabled: getPreviousDay() }"
           :to="{
             name: 'DayViewWithID',
@@ -20,15 +23,15 @@
           :popover="{ placement: 'bottom', visibility: 'click' }"
           :value="getStartDate()"
         >
-          <a class="btn blue waves-effect waves-light  ">
-            <i class="material-icons left">date_range</i>
+          <a class="btn blue waves-effect waves-light center  ">
+            <i class="material-icons left">date_range</i><span class="hide-on-small-only">
             {{
               structuredDays[currentDataIndex].dayContent.year +
                 "/" +
                 (structuredDays[currentDataIndex].dayContent.month + 1) +
                 "/" +
                 structuredDays[currentDataIndex].dayContent.day
-            }}
+            }}</span>
           </a>
 
           <div slot="day-content" slot-scope="{ day }">
@@ -61,6 +64,8 @@
         >
           <i class="material-icons">chevron_right</i>
         </router-link>
+        </div>  
+        <div class="col l4 m4 s12">
          <paper-dropdown-menu label="Time period" class=" right ">
                   <paper-listbox class="" slot="dropdown-content" selected="0">
                     <paper-item><router-link to="/Daily"><span>Day</span></router-link></paper-item>
@@ -68,6 +73,8 @@
                   </paper-listbox>
                 </paper-dropdown-menu>
 
+
+</div>
  
 
                 
@@ -84,36 +91,43 @@
           type="AreaChart"
           title="Usage per Hour"
           tileSize="day"
-          v-bind:animation="false"
-          titleChart="Repartition "
-          v-bind:colors="['red','blue','gold','green']"
+          v-bind:animation="true"
+          titleChart="KWh "
+        
+          v-bind:showLoad="false"
+          
         
         />
+        <!-- colors config   v-bind:colors="['red','blue','gold','green']" -->
       </div>
     </div>
 
     <!-- Second View in the daily-layout -->
     <div class="row">
-      <div class="col s12 m6 l4">
+      <div class="col s12 m6 l6">
         <Chart
           v-bind:array1="$store.getters.getPercenHourData[currentDataIndex]"
           type="ColumnChart"
-          title="Pourcentages per Hour"
-        
+          title="Percentages per Hour"
+         titleChart="%"
           tileSize="day"
           
         />
       </div>
       <!-- Third View in the daily-layout -->
-      <div class="col s12 m6 l4">
+      <div class="col s12 m6 l6">
         <Chart
           v-bind:array1="$store.getters.getGaugeUsageData[currentDataIndex]"
           type="PieChart"
-          title="Resource Load"
+          title="Resources Usage"
           tileSize="day"
+            titleChart="Power distribution  "
          
         />
+      
       </div>
+      <!-- Extra two charts to cofigure -->
+  <!--
       <div class="col s12 m6 l4">
         <Chart
           v-bind:array1="$store.getters.getColDayPercUsageData[currentDataIndex]"
@@ -130,7 +144,10 @@
          
         />
       </div>
+      -->
+      
     </div>
+   
   </div>
 </template>
 
@@ -249,5 +266,10 @@ export default {
   width: 150px;
   height: 70px;
   padding: 0px;
+}
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
 }
 </style>

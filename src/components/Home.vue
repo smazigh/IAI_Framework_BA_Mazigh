@@ -95,7 +95,7 @@ export default {
 },
 
 isLoaded : function () {
-return this.loaded;
+return this.loadingStatus;
 }
 
   },
